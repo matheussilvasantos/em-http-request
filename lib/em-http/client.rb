@@ -1,4 +1,4 @@
-require 'cookiejar'
+require 'http-cookie'
 
 module EventMachine
 
@@ -325,16 +325,16 @@ module EventMachine
 
     class CookieJar
       def initialize
-        @jar = ::CookieJar::Jar.new
+        @jar = HTTP::CookieJar.new
       end
 
       def set string, uri
-        @jar.set_cookie(uri, string) rescue nil # drop invalid cookies
+        @jar.parse(string, uri) rescue nil # drop invalid cookies
       end
 
       def get uri
         uri = URI.parse(uri) rescue nil
-        uri ? @jar.get_cookies(uri) : []
+        uri ? @jar.cookies(uri) : []
       end
     end # CookieJar
   end
